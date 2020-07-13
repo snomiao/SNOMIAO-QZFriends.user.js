@@ -6,7 +6,7 @@
 
 ### 安装脚本
 
-链接： https://greasyfork.org/zh-CN/scripts/406982-%E9%9B%AA%E5%96%B5%E7%A9%BA%E5%8F%8B%E5%88%97-qq-%E7%A9%BA%E9%97%B4%E4%B8%80%E9%94%AE%E8%8E%B7%E5%8F%96%E8%87%AA%E5%B7%B1%E7%9A%84%E5%A5%BD%E5%8F%8B%E5%88%97%E8%A1%A8
+Greasy fork 链接： https://greasyfork.org/zh-CN/scripts/406982-%E9%9B%AA%E5%96%B5%E7%A9%BA%E5%8F%8B%E5%88%97-qq-%E7%A9%BA%E9%97%B4%E4%B8%80%E9%94%AE%E8%8E%B7%E5%8F%96%E8%87%AA%E5%B7%B1%E7%9A%84%E5%A5%BD%E5%8F%8B%E5%88%97%E8%A1%A8
 
 ### 取得好友列表
 1. 安装上述用户脚本
