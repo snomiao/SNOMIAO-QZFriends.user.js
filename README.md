@@ -1,7 +1,6 @@
 # QQ好友管理套件
+
 导出 QQ 好友列表到`Excel`、`JSON`、`TSV`、`CSV`、输出 `.lnk` 或 `.url` 链接快速打开好友的聊天窗口. 
-
-
 
 ## 快速上手
 
@@ -26,8 +25,6 @@ QQ空间发说说的地方会打开好友列表
 | Windows | `tencent://Message/?Menu=yes&Uin=${uin}` |
 | Android | `mqq://im/chat?chat_type=wpa&version=1&src_type=web&uin=${uin}` |
 | IOS | `mqqwpa://im/chat?chat_type=wpa&uin=${uin}` |
-`"C:\Program Files (x86)\Tencent\QQ\Bin\QQScLauncher.exe" /uin:997596439 /quicklunch:3FC21656CAA53DB1B602BDCA1D6AA5998B0AF1C65935537DF954D44EC491AC1D40204E453947502C`
-
 
 #### 输出 .lnk 文件
 [windows-shortcuts - npm]( https://www.npmjs.com/package/windows-shortcuts )。
