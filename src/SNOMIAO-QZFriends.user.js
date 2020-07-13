@@ -2,13 +2,12 @@
 // @name         [雪喵空友列] QQ 空间一键获取自己的好友列表
 // @namespace    https://userscript.snomiao.com/
 // @version      1.0(20200713)
-// @description  [雪喵空友列] 一键导出 QQ 好友列表到Excel、JSON、TSV、CSV、输出 .lnk 或 .url 链接快速打开好友的聊天窗口.
+// @description  [雪喵空友列] 一键导出 QQ 好友列表到Excel、JSON、TSV、CSV、输出 .lnk 或 .url 链接快速打开好友的聊天窗口，本项目仅为学习研究使用，请保管好自己的个人数据，注意隐私安全。
 // @author       snomiao@gmail.com
 // @match        *://user.qzone.qq.com/*
 // @require      https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js
 // @grant        none
 // ==/UserScript==
-//
 
 ; (() => {
     // 常规函数定义
@@ -21,25 +20,36 @@
         a.click();
         a.remove()
     }
-    // 进度条
+    // 进度显示
     const 自动恢复标题函数 = (函数) => async (...参数) => {
         const 原标题 = document.title;
         const 返 = await 函数(...参数)
         document.title = 原标题;
         return 返;
     }
-    // const 节流函数 = (函数, 间隔 = 1000, 锁 = false) => async (...参数) => (!锁 ? (锁 = true, setTimeout(() => 锁 = false, 间隔), await 函数(参数)) : null)
-    // const 节流防抖函数 = (函数, 间隔 = 1000, 锁 = false) =>
-    //     (...参数) => new Promise((resolve, _) => (
-    //         !锁 ? (锁 = setTimeout(() => 锁 = false, 间隔), resolve(函数(参数)))
-    //             : (clearTimeout(锁), 锁 = setTimeout(() => (锁 = false, resolve(函数(参数))), 间隔))
-    //     ))
     const 进度显示 = (正在) => {
         var 串 = `[雪喵友列] ${正在}`
         document.title = 串
         console.log(串)
     }
-    //
+    // 计算 Token
+    const getCookieByRegex = (regex) => (e => e && e[1] || "")(document.cookie.match(regex))
+    // 用户常量
+    const uin = getCookieByRegex(/\bo_cookie=(.*?)(?=;|$)/)
+    const g_tk = (() => {
+        var p_skey = getCookieByRegex(/\bp_skey=(.*?)(?=;|$)/)
+        var skey = getCookieByRegex(/\bskey=(.*?)(?=;|$)/)
+        var rv2 = getCookieByRegex(/\brv2=(.*?)(?=;|$)/)
+        var b = p_skey || skey || rv2
+        var a = 5381;
+        for (var c = 0, d = b.length; c < d; ++c)
+            a += (a << 5) + b.charAt(c).charCodeAt();
+        return a & 2147483647
+    })();
+
+    // 输出好友列表
+
+    // 好友列表解析转换下载
     const 好友列表解析 = (json) => {
         进度显示("正在解析好友列表...")
         const 元 = json.data;
@@ -73,26 +83,6 @@
             ).join('\n')
         return 输出CSV
     }
-    // 下面这个函数启发自： [csv 文件打开乱码，有哪些方法可以解决？ - 知乎]( https://www.zhihu.com/question/21869078/answer/350728339 )
-    const 加UTF8文件BOM头 = (str) => '\uFEFF' + str
-
-    // 计算 Token
-    const getCookieByRegex = (regex) => (e => e && e[1] || "")(document.cookie.match(regex))
-    // 用户常量
-    const uin = getCookieByRegex(/\bo_cookie=(.*?)(?=;|$)/)
-    const g_tk = (() => {
-        var p_skey = getCookieByRegex(/\bp_skey=(.*?)(?=;|$)/)
-        var skey = getCookieByRegex(/\bskey=(.*?)(?=;|$)/)
-        var rv2 = getCookieByRegex(/\brv2=(.*?)(?=;|$)/)
-        var b = p_skey || skey || rv2
-        var a = 5381;
-        for (var c = 0, d = b.length; c < d; ++c)
-            a += (a << 5) + b.charAt(c).charCodeAt();
-        return a & 2147483647
-    })();
-
-    // 输出好友列表
-
     const URL文件生成 = (url) => `[InternetShortcut]\nURL=${url}`
     const 好友列表向URL文件转换并作为ZIP打包并下载 = async (json) => {
         const { 好友列表 } = 好友列表解析(json)
@@ -113,10 +103,10 @@
         }))
         进度显示(`正在压缩...`)
         await zip.generateAsync({ type: "blob" }).then(function (content) {
-        进度显示(`压缩完成，准备下载...`)
-        alert(`点击确定后，开始下载你的好友列表，如果下载解压后点击url文件出现安全警告，请看解决方法：\n请在解压前，对压缩包点一下右键属性，在属性下方，把安全警告勾掉，点确定，再解压即可。`)
-        进度显示(`正在下载...`)
-        let url = window.URL.createObjectURL(content);
+            进度显示(`压缩完成，准备下载...`)
+            alert(`点击确定后，开始下载你的好友列表，如果下载解压后点击url文件出现安全警告，请看解决方法：\n请在解压前，对压缩包点一下右键属性，在属性下方，把安全警告勾掉，点确定，再解压即可。`)
+            进度显示(`正在下载...`)
+            let url = window.URL.createObjectURL(content);
             下载URL到文件(url, 文件名)
             window.URL.revokeObjectURL(url);
         })
@@ -148,7 +138,7 @@
         }
     }
 
-    // API
+    // 从 TX 服务器获取好友列表
     const 好友列表JSON获取 = async (g_tk, uin) => {
         进度显示("正在获取好友列表...")
         const API地址 = `https://user.qzone.qq.com/proxy/domain/r.qzone.qq.com/cgi-bin/tfriend/friend_show_qqfriends.cgi?follow_flag=1&groupface_flag=0&fupdate=1&g_tk=${g_tk}&uin=${uin}`
@@ -159,6 +149,9 @@
             return json
         })
     }
+    // 下面这个函数启发自： [csv 文件打开乱码，有哪些方法可以解决？ - 知乎]( https://www.zhihu.com/question/21869078/answer/350728339 )
+    const 加UTF8文件BOM头 = (str) => '\uFEFF' + str
+    // 输出函数
     const 友列取 = async () => await 好友列表JSON获取(g_tk, uin)
     const 好友列表JSON输出 = 自动恢复标题函数(async () => 下载并复制文本(JSON.stringify(await 友列取()), ".json"))
     const 好友列表TSV输出 = 自动恢复标题函数(async () => 下载并复制文本(好友列表向TSV转换(await 友列取()), ".tsv"))
@@ -184,8 +177,8 @@
                     /<a onclick="好友列表ZIP输出()" href="javascript:" style="padding: 0rem" title="下载按目录划分的 .url 文件为 .zip包" >.URL.ZIP</a>
                 </div>
             </li>`)
-        const 个人中心 = document.querySelector('#tb_ic_li')
-        个人中心 && 个人中心.parentNode.insertBefore(获取好友列表控件, 个人中心)
+        const 好友菜单按钮 = document.querySelector('#tb_friend_li')
+        好友菜单按钮 && 好友菜单按钮.parentNode.insertBefore(获取好友列表控件, 好友菜单按钮)
         window.好友列表JSON输出 = () => 好友列表JSON输出()
         window.好友列表TSV输出 = () => 好友列表TSV输出()
         window.好友列表CSV输出 = () => 好友列表CSV输出()
