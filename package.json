@@ -1,0 +1,17 @@
+{
+  "name": "snoqq-client",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@pulipuli.chen/windows-shortcuts": "^0.1.6",
+    "jsonfile": "^6.0.1",
+    "windows-shortcut-maker": "0.0.6",
+    "windows-shortcuts": "^0.1.6"
+  }
+}
