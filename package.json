@@ -11,7 +11,10 @@
   "dependencies": {
     "@pulipuli.chen/windows-shortcuts": "^0.1.6",
     "jsonfile": "^6.0.1",
+    "jszip": "^3.5.0",
+    "node-fetch": "^2.6.0",
     "windows-shortcut-maker": "0.0.6",
-    "windows-shortcuts": "^0.1.6"
+    "windows-shortcuts": "^0.1.6",
+    "yargs": "^15.4.1"
   }
 }

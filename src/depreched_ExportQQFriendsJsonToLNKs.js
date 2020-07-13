@@ -3,17 +3,6 @@ const fs = require("fs");
 const { promisify } = require("util");
 const ws = require("windows-shortcuts");
 
-// 在不同的设备上唤起 QQ 有不同的方式，可以由链接方式唤醒如下
-const 发起会话URL = {
-    桌面通过网页: (uin) =>
-        `http://wpa.qq.com/msgrd?v=3&uin=${uin}&site=qq&menu=yes`,
-    桌面: (uin) => `tencent://Message/?Menu=yes&Uin=${uin}`,
-    安桌: (uin) =>
-        `mqq://im/chat?chat_type=wpa&version=1&src_type=web&uin=${uin}`,
-    苹果: (uin) => `mqqwpa://im/chat?chat_type=wpa&uin=${uin}`,
-};
-const 发起QQ会话URL获取 = (uin, 平台 = "桌面") => 发起会话URL[平台](uin);
-
 const ExportQQFriendsJsonToLNKs = async (jsonContents, outputLnkFolder) => {
     const e = jsonContents;
     const 元 = e.data;

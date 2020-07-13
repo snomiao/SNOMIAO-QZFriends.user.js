@@ -37,7 +37,7 @@
     // 计算 Token
     const getCookieByRegex = (regex) => (e => e && e[1] || "")(document.cookie.match(regex))
     // 用户常量
-    const uin = getCookieByRegex(/\bo_cookie=(.*?)(?=;|$)/)
+    const uin = getCookieByRegex(/\buin=o(.*?)(?=;|$)/)
     const g_tk = (() => {
         var p_skey = getCookieByRegex(/\bp_skey=(.*?)(?=;|$)/)
         var skey = getCookieByRegex(/\bskey=(.*?)(?=;|$)/)

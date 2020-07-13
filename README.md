@@ -1,5 +1,4 @@
-# QQ好友管理套件
-
+# 雪喵空友列 - QQ 好友导出备份管理套件
 导出 QQ 好友列表到`Excel`、`JSON`、`TSV`、`CSV`、输出 `.lnk` 或 `.url` 链接快速打开好友的聊天窗口. 
 
 ## 一、快速上手
@@ -12,6 +11,7 @@ Greasy fork 链接： https://greasyfork.org/zh-CN/scripts/406982-%E9%9B%AA%E5%9
 1. 安装上述用户脚本
 2. 登录 QQ 空间。
 3. 点击 `获取好友列表JSON` 如图
+   
    ![获取好友列表JSON按钮](./获取好友列表JSON按钮.png)
 
 ## 二、原理 & 制作笔记
