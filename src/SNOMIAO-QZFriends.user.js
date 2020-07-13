@@ -46,7 +46,7 @@
             a += (a << 5) + b.charAt(c).charCodeAt();
         return a & 2147483647
     })();
-    // 好友列表解析转换下载
+    // 好友列表解析
     const 好友列表解析 = (json) => {
         进度显示("正在解析好友列表...")
         const 元 = json.data;
@@ -80,6 +80,7 @@
             ).join('\n')
         return 输出CSV
     }
+    // URL 文件打包下载
     const URL文件生成 = (url) => `[InternetShortcut]\nURL=${url}`
     const 好友列表向URL文件转换并作为ZIP打包并下载 = async (json) => {
         const { 好友列表 } = 好友列表解析(json)
@@ -109,7 +110,6 @@
         })
         return ''
     }
-
     const 复制文本 = (content) => {
         const input = document.createElement('textarea');
         input.setAttribute('readonly', 'readonly');
@@ -134,7 +134,6 @@
             下载URL到文件(数据URL, 文件名)
         }
     }
-
     // 从 TX 服务器获取好友列表
     const 好友列表JSON获取 = async (g_tk, uin) => {
         进度显示("正在获取好友列表...")
