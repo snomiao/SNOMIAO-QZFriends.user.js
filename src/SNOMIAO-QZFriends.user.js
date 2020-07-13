@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         QQ 空间一键获取自己的好友列表
+// @name         [雪喵空友列] QQ 空间一键获取自己的好友列表
 // @namespace    https://userscript.snomiao.com/
-// @version      0.3
-// @description  [雪喵友列] 一键导出 QQ 好友列表到Excel、JSON、TSV、CSV、输出 .lnk 或 .url 链接快速打开好友的聊天窗口.
+// @version      1.0(20200713)
+// @description  [雪喵空友列] 一键导出 QQ 好友列表到Excel、JSON、TSV、CSV、输出 .lnk 或 .url 链接快速打开好友的聊天窗口.
 // @author       snomiao@gmail.com
 // @match        *://user.qzone.qq.com/*
 // @require      https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js

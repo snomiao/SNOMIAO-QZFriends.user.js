@@ -49,7 +49,7 @@ Should be easy enough to parse.
 
 ### 快速检索
 
-然后现在你就可以使用 Listary 搜索QQ好友的：备注、昵称、QQ号、来快速打开某位好友的聊天窗口了。
+然后现在你就可以使用 Listary、Everything 搜索QQ好友的：备注、昵称、QQ号、来快速打开某位好友的聊天窗口了。
 
 ## 平台兼容性测试（请PR）
 [x] Windows
