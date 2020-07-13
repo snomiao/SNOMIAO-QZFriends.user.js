@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         [雪喵空友列] QQ 空间一键获取自己的好友列表
 // @namespace    https://userscript.snomiao.com/
-// @version      1.0(20200713)
+// @version      1.1(20200714)
 // @description  [雪喵空友列] 一键导出下载 QQ 好友列表到 JSON、TSV、CSV Excel 进行管理，或作为 .url 链接放到桌面或使用 Everything、Listary 等以快速批量打开好友的聊天窗口。本项目仅为学习研究使用，请保管好自己的个人数据，注意隐私安全。使用方法：登录 https://user.qzone.qq.com/ ，在顶栏获取好友列表。
 // @supportURL   https://github.com/snomiao/SNOMIAO-QZFriends.user.js
 // @author       snomiao@gmail.com
@@ -10,6 +10,7 @@
 // @grant        none
 // @noframes
 // ==/UserScript==
+// v1.1 (20200714) 修复 uin 匹配问题
 // v1.0 (20200713) 完成 .URL 下载功能
 ; (() => {
     // 常规函数定义
