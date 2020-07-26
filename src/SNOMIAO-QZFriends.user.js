@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         [雪喵空友列] QQ 空间一键获取自己的好友列表
 // @namespace    https://userscript.snomiao.com/
-// @version      1.1(20200714)
+// @version      1.2.0-(20200714)
 // @description  [雪喵空友列] 一键导出下载 QQ 好友列表到 JSON、TSV、CSV Excel 进行管理，或作为 .url 链接放到桌面或使用 Everything、Listary 等以快速批量打开好友的聊天窗口。本项目仅为学习研究使用，请保管好自己的个人数据，注意隐私安全。使用方法：登录 https://user.qzone.qq.com/ ，在顶栏获取好友列表。
 // @supportURL   https://github.com/snomiao/SNOMIAO-QZFriends.user.js
 // @author       snomiao@gmail.com
@@ -86,6 +86,10 @@
     // URL 文件打包下载
     const URL文件生成 = (url) => `[InternetShortcut]\nURL=${url}`
     const 好友列表向URL文件转换并作为ZIP打包并下载 = async (json) => {
+        alert(
+            `点击确定后，开始下载你的好友列表，一般来说在 Windows 系统的浏览器中下载的文件，解压后点击url文件出现会安全警告，请看解决方法：\n`+
+            `方法1：请在解压前，对压缩包点一下右键属性，在属性下方，把安全警告勾掉，点确定，再解压即可。\n`
+            `方法2：对解压后的文件夹重新压缩再解压一遍。`)
         const { 好友列表 } = 好友列表解析(json)
         // 替换掉文件名里不允许出现的特殊字符
         const 文件名安全化 = (s) => s.toString().replace(/[\<\>\:\?\$\%\^\&\*\\\/\'\"\;\|\~\t\r\n-]+/g, "-")
@@ -105,7 +109,6 @@
         进度显示(`正在压缩...`)
         await zip.generateAsync({ type: "blob" }).then(function (content) {
             进度显示(`压缩完成，准备下载...`)
-            alert(`点击确定后，开始下载你的好友列表，如果下载解压后点击url文件出现安全警告，请看解决方法：\n请在解压前，对压缩包点一下右键属性，在属性下方，把安全警告勾掉，点确定，再解压即可。`)
             进度显示(`正在下载...`)
             let url = window.URL.createObjectURL(content);
             下载URL到文件(url, 文件名)
