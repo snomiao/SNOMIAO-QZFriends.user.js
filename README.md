@@ -1,4 +1,5 @@
 # 雪喵空友列 - QQ 好友导出备份管理套件
+
 导出 QQ 好友列表到 `Excel`、`JSON`、`TSV`、`CSV`、输出 `.url` 链接快速打开好友的聊天窗口。（Mac QQ 暂不可用）
 
 ## 一、快速上手
@@ -33,11 +34,13 @@ QQ空间发说说的地方会打开好友列表，顺着它的 API 调用就可�
 | IOS | `mqqwpa://im/chat?chat_type=wpa&uin=${uin}` |
 
 #### 输出 .lnk 文件（仅 windows）
+
 [windows-shortcuts - npm]( https://www.npmjs.com/package/windows-shortcuts )。
 雪星最早是用这个包来输出 lnk 文件，不过由于它在实现上有调用外部exe，并且还有个小 bug 就是不支持一部分 emoji 文件名的输出，不过可以用再改名的方式解决。
 .lnk 文件还有个优点就是可以嵌入图标，也就是能做到在图标上加载好友的 QQ 头像（需要爬下来）。
 
 #### 输出 .url 文件（Win可以，mac理论可以但未测试）
+
 If you open the .url file in a text editor it has the following content:
 
 ```ini
@@ -49,17 +52,21 @@ Should be easy enough to parse.
 然后用这个库 urlfile 库来输出为 .url 文件
 
 ### 打包
+
 加个 jszip 库就可以了
 
 ### 快速检索
+
 然后现在你就可以使用 Listary、Everything 搜索QQ好友的：备注、昵称、QQ号、来快速打开某位好友的聊天窗口了。
 
 ## 三、平台兼容性测试（请PR）
-[x] Windows
-[ ] Mac
-[ ] Wine
 
-## 四、参考文章：
+- [x] Windows
+- [ ] Mac
+- [ ] Wine
+
+## 四、参考：
+
 1. [QQ空间g_tk算法的JS脚本的获取和分析_gsls200808的专栏-CSDN博客_g_tk]( https://blog.csdn.net/gsls200808/article/details/48209917 )
 2. [javascript - Failed to execute 'btoa' on 'Window': The string to be encoded contains characters outside of the Latin1 range. - Stack Overflow]( https://stackoverflow.com/questions/23223718/failed-to-execute-btoa-on-window-the-string-to-be-encoded-contains-characte )
 3. [java - Windows shortcut (.lnk .url) parser for shortcut URL's - Stack Overflow]( https://stackoverflow.com/questions/4974151/windows-shortcut-lnk-url-parser-for-shortcut-urls )
