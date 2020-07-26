@@ -70,3 +70,4 @@ Should be easy enough to parse.
 1. [QQ空间g_tk算法的JS脚本的获取和分析_gsls200808的专栏-CSDN博客_g_tk]( https://blog.csdn.net/gsls200808/article/details/48209917 )
 2. [javascript - Failed to execute 'btoa' on 'Window': The string to be encoded contains characters outside of the Latin1 range. - Stack Overflow]( https://stackoverflow.com/questions/23223718/failed-to-execute-btoa-on-window-the-string-to-be-encoded-contains-characte )
 3. [java - Windows shortcut (.lnk .url) parser for shortcut URL's - Stack Overflow]( https://stackoverflow.com/questions/4974151/windows-shortcut-lnk-url-parser-for-shortcut-urls )
+4. [QQ好友列表数据获取 - 知乎]( https://zhuanlan.zhihu.com/p/24580113 )
