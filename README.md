@@ -71,3 +71,4 @@ Should be easy enough to parse.
 2. [javascript - Failed to execute 'btoa' on 'Window': The string to be encoded contains characters outside of the Latin1 range. - Stack Overflow]( https://stackoverflow.com/questions/23223718/failed-to-execute-btoa-on-window-the-string-to-be-encoded-contains-characte )
 3. [java - Windows shortcut (.lnk .url) parser for shortcut URL's - Stack Overflow]( https://stackoverflow.com/questions/4974151/windows-shortcut-lnk-url-parser-for-shortcut-urls )
 4. [QQ好友列表数据获取 - 知乎]( https://zhuanlan.zhihu.com/p/24580113 )
+5. [python 记一次计算qzonetoken经历_Hello_Seattle的专栏-CSDN博客]( https://blog.csdn.net/Hello_Seattle/article/details/55281869 )
