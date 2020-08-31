@@ -157,7 +157,7 @@
     const 友列取 = async () => await 好友列表JSON获取(g_tk, uin)
     const 好友列表JSON输出 = 自动恢复标题函数(async () => 下载并复制文本(JSON.stringify(await 友列取()), ".json"))
     const 好友列表TSV输出 = 自动恢复标题函数(async () => 下载并复制文本(好友列表向TSV转换(await 友列取()), ".tsv"))
-    const 好友列表CSV输出 = 自动恢复标题函数(async () => 下载并复制文本(加UTF8文件BOM头(好友列表向CSV转换(await 友列取())), ".csv"))
+    const 好友列表CSV输出 = 自动恢复标题函数(async () => 下载并复制文本(好友列表向CSV转换(await 友列取()), ".csv"))
     const 好友列表EXCELCSV输出 = 自动恢复标题函数(async () => 下载并复制文本(加UTF8文件BOM头(好友列表向CSV转换(await 友列取())), ".csv"))
     const 好友列表ZIP输出 = 自动恢复标题函数(async () => 好友列表向URL文件转换并作为ZIP打包并下载(await 友列取()))
     // UI 定义
