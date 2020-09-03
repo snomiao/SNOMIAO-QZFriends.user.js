@@ -24,6 +24,7 @@
 
 ; (() => {
     // 常规函数定义
+    const 睡 = (ms) => new Promise(resolve => setTimeout(resolve, ms));
     const 下载URL到文件 = (url, filename = '') => {
         var a = document.createElement('a');
         a.style.display = 'none';
@@ -34,18 +35,18 @@
         a.remove()
     }
     // 进度显示
-    const 自动恢复标题函数 = (函数) => async (...参数) => {
+    const 将进度在标题显示函数 = (函数) => async (...参数) => {
         const 原标题 = document.title;
         const 返 = await 函数(...参数)
         document.title = 原标题;
-        return 返;
+        return 返
     }
     const 进度显示 = (正在) => {
         var 串 = `[雪喵友列] ${正在}`
         document.title = 串
         console.log(串)
     }
-    const 用户信息取 = () => {
+    const 用户令牌获取 = () => {
         // 取cookie
         const getCookieByRegex = (regex) => (e => e && e[1] || "")(document.cookie.match(regex))
         // 用户常量
@@ -64,49 +65,14 @@
         const uinView = parseInt(location.pathname.slice(1)) // 当前QQ空间的QQ号
         return { uin, g_tk, qzonetoken, uinView }
     }
-    const { uin, g_tk, qzonetoken, uinView } = 用户信息取()
-    // 好友列表解析
-    const 好友列表解析 = (json) => {
-        进度显示("正在解析好友列表...")
-        const 元 = json.data;
-        const 分组名表 = Object.fromEntries(元.gpnames.map(({ gpid, gpname }) => [gpid, gpname]))
-        const 好友列表 = 元.items.map(
-            ({ name, remark, uin, groupid }) => {
-                const [Q号, 分组, 昵称, 备注] = [uin, ...[分组名表[groupid], name, remark].map(unescape)];
-                return { Q号, 分组, 昵称, 备注 }
-            })
-        return { 分组名表, 好友列表 }
-    }
-    const 好友列表向TSV转换 = (json) => {
-        const { 好友列表 } = 好友列表解析(json)
-        进度显示("正在制作TSV表格...")
-        const 输出TSV = ['Q号', '分组', '昵称', '备注'].join('\t') + '\n' +
-            好友列表.map(({ Q号, 分组, 昵称, 备注 }) => [Q号, 分组, 昵称, 备注]
-                // TSV 没有转义的定义，不兼容的字符只能直接删掉
-                .map(e => e.toString().replace(/\t|\r|\n/g, '_')).join('\t')
-            ).join('\n')
-        return 输出TSV
-    }
-    const 好友列表向CSV转换 = (json) => {
-        const { 好友列表 } = 好友列表解析(json)
-        进度显示("正在制作CSV表格...")
-        const 输出CSV = ['Q号', '分组', '昵称', '备注'].join(',') + '\n' +
-            好友列表.map(({ Q号, 分组, 昵称, 备注 }) => [Q号, 分组, 昵称, 备注]
-                .map(e => e.toString()
-                    // CSV转义见 [CSV格式特殊字符转义处理_icycode的专栏-CSDN博客_csv 转义]( https://blog.csdn.net/icycode/article/details/80043956 )
-                    .replace(/(.*?)("|,|\r|\n)(.*)/, (s) => '"' + s.replace(/"/g, '""') + '"')
-                ).join(',')
-            ).join('\n')
-        return 输出CSV
-    }
+    const { uin, g_tk, qzonetoken, uinView } = 用户令牌获取()
     // URL 文件打包下载
     const URL文件生成 = (url) => `[InternetShortcut]\nURL=${url}`
-    const 好友列表向URL文件转换并作为ZIP打包并下载 = async (json) => {
+    const 好友列表向URL文件转换并作为ZIP打包并下载 = async (好友列表) => {
         alert(
             `点击确定后，开始下载你的好友列表，一般来说在 Windows 系统的浏览器中下载的文件，解压后点击url文件出现会安全警告，请看解决方法：\n` +
-            `方法1：请在解压前，对压缩包点一下右键属性，在属性下方，把安全警告勾掉，点确定，再解压即可。\n`
-                `方法2：对解压后的文件夹重新压缩再解压一遍。`)
-        const { 好友列表 } = 好友列表解析(json)
+            `方法1：请在解压前，对压缩包点一下右键属性，在属性下方，把安全警告勾掉，点确定，再解压即可。\n` +
+            `方法2：对解压后的文件夹重新压缩再解压一遍。`)
         // 替换掉文件名里不允许出现的特殊字符
         const 文件名安全化 = (s) => s.toString().replace(/[\<\>\:\?\$\%\^\&\*\\\/\'\"\;\|\~\t\r\n-]+/g, "-")
 
@@ -146,7 +112,7 @@
             console.log(`长度为${content.length}的内容已复制`);
         }
         document.body.removeChild(input);
-    };
+    }
     const 今日 = () => new Date(+new Date() - new Date().getTimezoneOffset() * 60e3).toISOString().slice(0, 10)
     const 下载并复制文本 = (文本, 文件名) => {
         const 数据URL = "data:text/plain;base64," + btoa(unescape(encodeURIComponent(文本)));
@@ -155,17 +121,70 @@
             下载URL到文件(数据URL, 文件名)
         }
     }
-    // 从 TX 服务器获取好友列表
-    const 好友列表JSON获取 = async (g_tk, uin) => {
-        进度显示("正在获取好友列表...")
-        const API地址 = `https://user.qzone.qq.com/proxy/domain/r.qzone.qq.com/cgi-bin/tfriend/friend_show_qqfriends.cgi?follow_flag=1&groupface_flag=0&fupdate=1&g_tk=${g_tk}&uin=${uin}`
-        return await jsonp抓取(API地址)
-    }
     // 下面这个函数启发自： [csv 文件打开乱码，有哪些方法可以解决？ - 知乎]( https://www.zhihu.com/question/21869078/answer/350728339 )
     const 加UTF8文件BOM头 = 串 => '\uFEFF' + 串
-    // 输出函数
-    const 友列取 = async () => await 好友列表JSON获取(g_tk, uin)
-    const 访客列表数据获取 = async (保留完整原数据格式 = false) => {
+    // 获取数据
+    async function 好友列获取() {
+        const { uinMe, g_tk, qzonetoken, uinView } = 用户令牌获取();
+        const API地址 = `https://user.qzone.qq.com/proxy/domain/r.qzone.qq.com/cgi-bin/tfriend/friend_show_qqfriends.cgi?follow_flag=1&groupface_flag=0&fupdate=1&g_tk=${g_tk}&uin=${uin}`
+        const json = await jsonp抓取(API地址)
+        const 分组名表 = Object.fromEntries(元.gpnames.map(({ gpid, gpname }) => [gpid, gpname]))
+        const 好友列 = json.data.items.map(({ name, remark, uin, groupid }) => {
+            const [Q号, 分组, 昵称, 备注] = [uin, ...[分组名表[groupid], name, remark].map(unescape)];
+            return { Q号, 分组, 昵称, 备注 }
+        })
+        return 好友列
+    }
+    async function 动态访客列获取(tid = undefined) {
+        if (!tid) return (await Promise.all((await 动态列获取()).map(({ tid }) => tid).filter(e => e).map(动态访客列获取))).flat()
+
+        const { uinMe, g_tk, qzonetoken, uinView } = 用户令牌获取();
+        const num = 6, list = [];
+        let totalNum = num;
+        for (let beginNum = 1; beginNum <= totalNum; beginNum += num) {
+            await 睡(200);
+            const json = await jsonp抓取(`https://h5.qzone.qq.com/proxy/domain/g.qzone.qq.com/cgi-bin/friendshow/cgi_get_visitor_single?uin=${uinView}&appid=311&blogid=${tid}&param=${tid}&ref=qzfeeds&beginNum=${beginNum}&needFriend=1&num=${num}&g_tk=${g_tk}&qzonetoken=${qzonetoken}`)
+            console.assert(json.data.list, "rt")
+            totalNum = json.data.totalNum
+            if (!json.data.list.length) {
+                console.warn("动态访客列获取：权限不够，需要黄钻才能获取更多数据")
+                break;
+            }
+            list.push(...json.data.list)
+        }
+        const 动态访客列表 = list.map(({ uin, name, time, isFriend, source, mod, contentid, Isolate, is_medal, is_qzvip, qzvip_level, is_supervip, is_yearvip, medal_level, medal_days, medal_state, qzone_level, is_special_vip }) => {
+            // return { uin, name, time, isFriend, source, mod, contentid, Isolate, is_medal, is_qzvip, qzvip_level, is_supervip, is_yearvip, medal_level, medal_days, medal_state, qzone_level, is_special_vip }
+            return { uin, name, time }
+        })
+        console.log(动态访客列表)
+        // 动态访客列 = 动态访客列获取(tid)
+        // 动态访客列获取(tid)
+        return 动态访客列表
+    }
+    async function 动态列获取(uin = undefined) {
+        const { uinMe, g_tk, qzonetoken, uinView } = 用户令牌获取()
+        uin = uin || uinView || uinMe
+
+        const num = 20, msglist = [];
+        let total = num;
+        for (let pos = 0; pos < total; pos += 20) {
+            const json = await jsonp抓取(`https://user.qzone.qq.com/proxy/domain/taotao.qq.com/cgi-bin/emotion_cgi_msglist_v6?uin=${uin}&ftype=0&sort=0&pos=${pos}&num=${num}&replynum=100&g_tk=${g_tk}&callback=_Callback&code_version=1&format=jsonp&need_private_comment=1&qzonetoken=${qzonetoken}`)
+            console.log(json);
+            total = json.total
+            if (json?.code !== 0) { return (alert(`错误代码: ${json.code}`), []) }
+            msglist.push(...json.msglist)
+        }
+        const 动态列表 = msglist?.map(({ certified, cmtnum, commentlist, conlist, content, createTime, created_time, editMask, fwdnum, has_more_con, isEditable, issigin, lbs, name, pic_template, right, rt_sum, secret, source_appid, source_name, source_url, t1_source, t1_subtype, t1_termtype, tid, ugc_right, uin, wbid }) => {
+            // 评论列表: commentlist
+            // const 动态访客列 = 动态访客列获取(tid)
+            // return {  }
+            // return { 动态内容: content, 动态QQ号: uin, 动态ID: tid }
+            return { content, uin, tid, createTime }
+        })
+        console.log(动态列表);
+        return 动态列表
+    }
+    const 访客列获取 = async (保留完整原数据格式 = true) => {
         // const g_tk // 有了
         const API = `https://h5.qzone.qq.com/proxy/domain/g.qzone.qq.com/cgi-bin/friendshow/cgi_get_visitor_simple?uin=${uinView}&mask=3&g_tk=${g_tk}&fupdate=1&qzonetoken=${qzonetoken}`
         const json = await jsonp抓取(API)
@@ -184,33 +203,37 @@
                 空间等级: qzone_level,
             }))
     }
-    const JSON列转CSV = (列, 分割符 = ",") => {
+    function JSON列转CSV(列, 分割符 = ",") {
         const 键列 = [...new Set(列.map(Object.keys).flat())]
         const 分割转符义 = 串 => typeof 串 === "string" && (串.match(分割符) || 串.match(/"|\r|\n/)) ? `"${串.replace(/"/g, '""')}"` : 串;
         return ([键列].concat(列.map(对象 => 键列.map(键 => 对象[键]).map(分割转符义)))).map(e => e.join(分割符)).join('\n')
     }
-    const 访客列表CSV获取 = async () => JSON列转CSV(await 访客列表数据获取(), ',')
-    const 访客列表TSV获取 = async () => JSON列转CSV(await 访客列表数据获取(), '\t')
-    const 访客列表原始数据CSV获取 = async () => JSON列转CSV(await 访客列表数据获取("保留原始数据"), ',')
-    const 访客列表原始数据TSV获取 = async () => JSON列转CSV(await 访客列表数据获取("保留原始数据"), '\t')
-    const 访客列表EXCELCSV导出 = 自动恢复标题函数(async () => 下载并复制文本(加UTF8文件BOM头(await 访客列表CSV获取()), 今日() + `-访客列表@${uinView}.csv`))
-    const 访客列表TSV导出 = 自动恢复标题函数(async () => 下载并复制文本(await 访客列表TSV获取(), 今日() + `-访客列表@${uinView}.tsv`))
-    const 访客列表原始数据EXCELCSV导出 = 自动恢复标题函数(async () => 下载并复制文本(加UTF8文件BOM头(await 访客列表原始数据CSV获取()), 今日() + `-访客列表@${uinView}.csv`))
-    const 访客列表原始数据TSV导出 = 自动恢复标题函数(async () => 下载并复制文本(await 访客列表原始数据TSV获取(), 今日() + `-访客列表@${uinView}.tsv`))
-
-    const 好友列表JSON输出 = 自动恢复标题函数(async () => 下载并复制文本(JSON.stringify(await 友列取()), 今日() + `-好友列表@${uin}.json`))
-    const 好友列表CSV输出 = 自动恢复标题函数(async () => 下载并复制文本(好友列表向CSV转换(await 友列取()), 今日() + `-好友列表@${uin}.csv`))
-    const 好友列表TSV输出 = 自动恢复标题函数(async () => 下载并复制文本(好友列表向TSV转换(await 友列取()), 今日() + `-好友列表@${uin}.tsv`))
-    const 好友列表EXCELCSV输出 = 自动恢复标题函数(async () => 下载并复制文本(加UTF8文件BOM头(好友列表向CSV转换(await 友列取())), 今日() + `-好友列表@${uin}.csv`))
-    const 好友列表ZIP输出 = 自动恢复标题函数(async () => 好友列表向URL文件转换并作为ZIP打包并下载(await 友列取()))
-    // UI 定义
+    //
+    window.访客列表EXCELCSV导出 = 将进度在标题显示函数(async () => 下载并复制文本(加UTF8文件BOM头(JSON列转CSV(await 访客列获取(), ',')), 今日() + `-访客列表@${uinView}.csv`))
+    window.访客列表TSV导出 = 将进度在标题显示函数(async () => 下载并复制文本(JSON列转CSV(await 访客列获取(), '\t'), 今日() + `-访客列表@${uinView}.tsv`))
+    // window.访客列表原始数据EXCELCSV导出 = 将进度在标题显示函数(async () => 下载并复制文本(加UTF8文件BOM头(JSON列转CSV(await 访客列获取("保留原始数据"), ',')), 今日() + `-访客列表@${uinView}.csv`))
+    // window.访客列表原始数据TSV导出 = 将进度在标题显示函数(async () => 下载并复制文本(JSON列转CSV(await 访客列获取("保留原始数据"), '\t'), 今日() + `-访客列表@${uinView}.tsv`))
+    //
+    window.好友列表JSON导出 = 将进度在标题显示函数(async () => 下载并复制文本(JSON.stringify(await 好友列获取()), 今日() + `-好友列表@${uin}.json`))
+    window.好友列表TSV导出 = 将进度在标题显示函数(async () => 下载并复制文本(JSON列转CSV(await 好友列获取(), '\t'), 今日() + `-好友列表@${uin}.tsv`))
+    window.好友列表CSV导出 = 将进度在标题显示函数(async () => 下载并复制文本(JSON列转CSV(await 好友列获取()), 今日() + `-好友列表@${uin}.csv`))
+    window.好友列表ZIP导出 = 将进度在标题显示函数(async () => 好友列表向URL文件转换并作为ZIP打包并下载(await 好友列获取()))
+    window.好友列表EXCELCSV导出 = 将进度在标题显示函数(async () => 下载并复制文本(加UTF8文件BOM头(JSON列转CSV(await 好友列获取())), 今日() + `-好友列表@${uin}.csv`))
+    // 
+    window.动态列表JSON导出 = 将进度在标题显示函数(async () => 下载并复制文本(await 动态列获取(), 今日() + `-动态列表@${uinView}.tsv`))
+    window.动态列表TSV导出 = 将进度在标题显示函数(async () => 下载并复制文本(JSON列转CSV(await 动态列获取(), '\t'), 今日() + `-动态列表@${uinView}.tsv`))
+    window.动态列表EXCELCSV导出 = 将进度在标题显示函数(async () => 下载并复制文本(加UTF8文件BOM头(JSON列转CSV(await 动态列获取(), ',')), 今日() + `-动态列表@${uinView}.csv`))
+    //
+    window.动态访客列表JSON导出 = 将进度在标题显示函数(async () => 下载并复制文本(await 动态访客列获取(), 今日() + `-动态访客列表@${uinView}.tsv`))
+    window.动态访客列表TSV导出 = 将进度在标题显示函数(async () => 下载并复制文本(JSON列转CSV(await 动态访客列获取(), '\t'), 今日() + `-动态访客列表@${uinView}.tsv`))
+    window.动态访客列表EXCELCSV导出 = 将进度在标题显示函数(async () => 下载并复制文本(加UTF8文件BOM头(JSON列转CSV(await 动态访客列获取(), ',')), 今日() + `-动态访客列表@${uinView}.csv`))
+    // UI 用函数定义
     const 新元素 = (innerHTML, attributes = {}) => {
-        const e = document.createElement("div");
-        e.innerHTML = innerHTML;
+        const e = document.createElement("div"); e.innerHTML = innerHTML;
         return Object.assign(e.children[0], attributes)
     }
-
-    const 按钮向页面插入 = () => {
+    //
+    function 按钮向页面插入() {
         // 在“个人中心”按钮前插入一个按钮
         // const 好友菜单按钮 = document.querySelector('#tb_friend_li')
         const 顶栏导航首项 = document.querySelector('.top-nav>*')
@@ -219,7 +242,7 @@
                 <div class="nav-list-inner">
                     <a id="export" href="javascript:" class="homepage-link a-link nav-hover" accesskey="z"><i class="ui-icon icon-friend"></i><span>导出好友、访客列表</span><i class="drop-down-arrow"></i></a>
                 </div>
-                <div class="nav-drop-down export-drop-down" id="export-drop-down" style="display: none">
+                <div class="nav-drop-down export-drop-down" id="export-drop-down" style="display: none; height: 30em">
                     <div class="side-area">
                         <!-- <div class="friends-link"> -->
                             <!-- <a href="javascript:" class="link-icon"><i class="icon-friends"></i></a> -->
@@ -234,18 +257,27 @@
                         <br>
                         <h3>最近访客列表导出：</h3>
                         <ul style="display: flex">
-                        <li style="margin: 1em"><a onclick="访客列表EXCELCSV导出()" href="javascript:" style="padding: 1rem" title="复制并下载CSV格式的最近30个访客列表">精简.CSV</a></li>
-                        <li style="margin: 1em"><a onclick="访客列表TSV导出()" href="javascript:" style="padding: 1rem" title="复制并下载TSV格式的最近30个访客列表">精简.TSV</a></li>
-                        <li style="margin: 1em"><a onclick="访客列表原始数据EXCELCSV导出()" href="javascript:" style="padding: 1rem" title="复制并下载CSV格式的最近30个访客列表">原始.CSV</a></li>
-                        <li style="margin: 1em"><a onclick="访客列表原始数据TSV导出()" href="javascript:" style="padding: 1rem" title="复制并下载TSV格式的最近30个访客列表">原始.TSV</a></li>
+                        <li style="margin: 1em"><a onclick="访客列表EXCELCSV导出()" href="javascript:" style="padding: 1rem" title="复制并下载CSV格式的最近30个访客列表">.CSV</a></li>
+                        <li style="margin: 1em"><a onclick="访客列表TSV导出()" href="javascript:" style="padding: 1rem" title="复制并下载TSV格式的最近30个访客列表">.TSV</a></li>
                         </ul>
-                        <br>
                         <h3>☑👫📜好友列表导出</h3>
                         <ul style="display: flex">
-                        <li style="margin: 1em"><a onclick="好友列表JSON输出()" href="javascript:" style="padding: 1rem" title="复制并下载JSON格式">.JSON</a></li>
-                        <li style="margin: 1em"><a onclick="好友列表TSV输出()" href="javascript:" style="padding: 1rem" title="复制并下载TSV格式">.TSV</a></li>
-                        <li style="margin: 1em"><a onclick="好友列表EXCELCSV输出()" href="javascript:" style="padding: 1rem" title="复制并下载 Excel 可直接打开的CSV格式" >.CSV(Excel)</a></li>
-                        <li style="margin: 1em"><a onclick="好友列表ZIP输出()" href="javascript:" style="padding: 1rem" title="下载按目录划分的 .url 文件为 .zip包" >.URL.ZIP</a></li>
+                        <li style="margin: 1em"><a onclick="好友列表JSON导出()" href="javascript:" style="padding: 1rem" title="复制并下载JSON格式">.JSON</a></li>
+                        <li style="margin: 1em"><a onclick="好友列表TSV导出()" href="javascript:" style="padding: 1rem" title="复制并下载TSV格式">.TSV</a></li>
+                        <li style="margin: 1em"><a onclick="好友列表EXCELCSV导出()" href="javascript:" style="padding: 1rem" title="复制并下载 Excel 可直接打开的CSV格式" >.CSV(Excel)</a></li>
+                        <li style="margin: 1em"><a onclick="好友列表ZIP导出()" href="javascript:" style="padding: 1rem" title="下载按目录划分的 .url 文件为 .zip包" >.URL.ZIP</a></li>
+                        </ul>
+                        <h3>说说动态列表导出</h3>
+                        <ul style="display: flex">
+                        <li style="margin: 1em"><a onclick="动态列表JSON导出()" href="javascript:" style="padding: 1rem" title="复制并下载JSON格式">.JSON</a></li>
+                        <li style="margin: 1em"><a onclick="动态列表TSV导出()" href="javascript:" style="padding: 1rem" title="复制并下载TSV格式">.TSV</a></li>
+                        <li style="margin: 1em"><a onclick="动态列表EXCELCSV导出()" href="javascript:" style="padding: 1rem" title="复制并下载 Excel 可直接打开的CSV格式" >.CSV(Excel)</a></li>
+                        </ul>
+                        <h3>说说动态访客列表导出（如果数据量大要很久）</h3>
+                        <ul style="display: flex">
+                        <li style="margin: 1em"><a onclick="动态访客列表JSON导出()" href="javascript:" style="padding: 1rem" title="复制并下载JSON格式">.JSON</a></li>
+                        <li style="margin: 1em"><a onclick="动态访客列表TSV导出()" href="javascript:" style="padding: 1rem" title="复制并下载TSV格式">.TSV</a></li>
+                        <li style="margin: 1em"><a onclick="动态访客列表EXCELCSV导出()" href="javascript:" style="padding: 1rem" title="复制并下载 Excel 可直接打开的CSV格式" >.CSV(Excel)</a></li>
                         </ul>
                     </div>
                 </div>
@@ -260,17 +292,12 @@
             displayPanel = !displayPanel
             document.querySelector("#export-drop-down").style.display = displayPanel ? "inherit" : "none"
         })
-        // 配置全局函数
-        window.好友列表JSON输出 = () => 好友列表JSON输出()
-        window.好友列表TSV输出 = () => 好友列表TSV输出()
-        window.好友列表CSV输出 = () => 好友列表CSV输出()
-        window.好友列表EXCELCSV输出 = () => 好友列表EXCELCSV输出()
-        window.好友列表ZIP输出 = () => 好友列表ZIP输出()
-        window.访客列表EXCELCSV导出 = () => 访客列表EXCELCSV导出()
-        window.访客列表TSV导出 = () => 访客列表TSV导出()
-        window.访客列表原始数据EXCELCSV导出 = () => 访客列表原始数据EXCELCSV导出()
-        window.访客列表原始数据TSV导出 = () => 访客列表原始数据TSV导出()
+
     }
+    // const 动态访客列表功能插入 = () => {
+    //     <a class="state qz_feed_plugin" data-role="Visitor" data-config="311|171d763bd1e5495f26090700|997596439" data-clicklog="visitor">浏览373次</a>
+    //     点击导出列表
+    // }
 
     // 生成界面
     if (location.hostname == 'user.qzone.qq.com') {
