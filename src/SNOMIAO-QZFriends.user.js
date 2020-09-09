@@ -179,8 +179,9 @@
             // const 动态访客列 = 动态访客列获取(tid)
             // return {  }
             // return { 动态内容: content, 动态QQ号: uin, 动态ID: tid }
-            return { content, uin, tid, createTime }
+            return { uin, tid, createTime, content }
         })
+        console.log(msglist)
         console.log(动态列表);
         return 动态列表
     }
@@ -220,7 +221,7 @@
     window.好友列表ZIP导出 = 将进度在标题显示函数(async () => 好友列表向URL文件转换并作为ZIP打包并下载(await 好友列获取()))
     window.好友列表EXCELCSV导出 = 将进度在标题显示函数(async () => 下载并复制文本(加UTF8文件BOM头(JSON列转CSV(await 好友列获取())), 今日() + `-好友列表@${uin}.csv`))
     // 
-    window.动态列表JSON导出 = 将进度在标题显示函数(async () => 下载并复制文本(await 动态列获取(), 今日() + `-动态列表@${uinView}.tsv`))
+    window.动态列表JSON导出 = 将进度在标题显示函数(async () => 下载并复制文本(JSON.stringify(await 动态列获取()), 今日() + `-动态列表@${uinView}.tsv`))
     window.动态列表TSV导出 = 将进度在标题显示函数(async () => 下载并复制文本(JSON列转CSV(await 动态列获取(), '\t'), 今日() + `-动态列表@${uinView}.tsv`))
     window.动态列表EXCELCSV导出 = 将进度在标题显示函数(async () => 下载并复制文本(加UTF8文件BOM头(JSON列转CSV(await 动态列获取(), ',')), 今日() + `-动态列表@${uinView}.csv`))
     //
