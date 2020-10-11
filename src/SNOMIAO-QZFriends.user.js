@@ -3,7 +3,7 @@
 // @name:zh          [雪喵空友列] QQ 空间一键获取自己的好友列表、访客列表等 - 最后更新于 2020-09-03
 // @name:en          [SNOMIAO-QZFriends] Qzone clicks to get his friend list, visitor list, etc. last updated on 2020-09-03
 // @namespace        https://userscript.snomiao.com/
-// @version          1.3.1
+// @version          1.3.2
 // @description:zh   [雪喵空友列] 一键导出下载 QQ 好友列表到 JSON、TSV、CSV Excel 进行管理，或作为 .url 链接放到桌面或使用 Everything、Listary 等以快速批量打开好友的聊天窗口。使用方法：登录 https://user.qzone.qq.com/ ，在顶栏获取好友列表。本项目仅为学习研究使用，本项目仅仅对你本人所浏览的 QQ 空间网页数据进行重新编码，没有任何越权功能。请保管好自己的个人数据，如有必要请亲自审查本项目代码，以确保自身隐私数据安全。项目地址： https://github.com/snomiao/SNOMIAO-QZFriends.user.js ，对本脚本有疑问请联系 QQ：snomiao@gmail.com。
 // @supportURL       https://github.com/snomiao/SNOMIAO-QZFriends.user.js
 // @author           snomiao@gmail.com
@@ -17,6 +17,7 @@
  * [数据主权 - 知乎]( https://www.zhihu.com/topic/20676535/hot )
  * 
  * 更新记录
+ * v1.3.2 (20201011) 修复 zip 导出功能
  * v1.3.0 (20200831) 加入访客列表功能
  * v1.1 (20200714) 修复 uin 匹配问题
  * v1.0 (20200713) 完成 .URL 下载功能
@@ -128,7 +129,7 @@
         const { uinMe, g_tk, qzonetoken, uinView } = 用户令牌获取();
         const API地址 = `https://user.qzone.qq.com/proxy/domain/r.qzone.qq.com/cgi-bin/tfriend/friend_show_qqfriends.cgi?follow_flag=1&groupface_flag=0&fupdate=1&g_tk=${g_tk}&uin=${uin}`
         const json = await jsonp抓取(API地址)
-        const 分组名表 = Object.fromEntries(元.gpnames.map(({ gpid, gpname }) => [gpid, gpname]))
+        const 分组名表 = Object.fromEntries(json.data.gpnames.map(({ gpid, gpname }) => [gpid, gpname]))
         const 好友列 = json.data.items.map(({ name, remark, uin, groupid }) => {
             const [Q号, 分组, 昵称, 备注] = [uin, ...[分组名表[groupid], name, remark].map(unescape)];
             return { Q号, 分组, 昵称, 备注 }
